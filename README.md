@@ -27,6 +27,7 @@ omodoro has the following requirements:
 
 - Customize the variables in the SETTINGS section to your needs
 - Run the script with python
+- Enter "q" to quit omodoro
 
 ### 4. License
 

@@ -13,8 +13,7 @@
 from os import system
 from datetime import datetime, timedelta
 from time import sleep
-
-VERSION = "0.1"
+from threading import Thread
 
 # SETTINGS
 # adjust the pomodoro cycle to your needs
@@ -31,6 +30,7 @@ cnt_pomodori = num_pomodori # pomodori left in the current cycle
 cnt_short_breaks = num_pomodori - 1 # short breaks left in the current cycle
 end_time = None # end time of the current state
 state = States.Pomodori
+command = "" # input string
 
 def changeState(newState, length):
     global end_time, state
@@ -52,57 +52,69 @@ def changeState(newState, length):
     system("notify-send -u critical '%s' '%s %s'" % (title, description, end_time.strftime("%H:%M")))
     state = newState
 
-def pomodoroLoop():
-    global cnt_pomodori, cnt_short_breaks, state
+class PomodoroThread(Thread):
+    def __init__(self):
+        Thread.__init__(self)
 
-    while True:
-        if state == States.Pomodori:
-            # pomodori is not over
-            if end_time > datetime.now():
-                pass
-            else:
-                # decrease number of pomodori for the current cycle
-                cnt_pomodori -= 1
-                if length_short_break > 0 and cnt_short_breaks > 0:
-                    # length of short breaks > 0 and short breaks left -> start short break
-                    changeState(States.ShortBreak, length_short_break)
-                elif length_short_break == 0 and cnt_pomodori != 0:
-                    # no short breaks -> start next pomodori
-                    changeState(States.Pomodori, length_pomodori)
-                elif cnt_pomodori == 0:
-                    # last pomodori over -> start long break
-                    changeState(States.LongBreak, length_long_break)
+    def run(self):
+        global cnt_pomodori, cnt_short_breaks, state
+
+        while command != "q":
+            if state == States.Pomodori:
+                # pomodori is not over
+                if end_time > datetime.now():
+                    pass
                 else:
-                    # Something went wrong - exit
-                    exit(1)
-        elif state == States.ShortBreak:
-            # short break is not over
-            if end_time > datetime.now():
+                    # decrease number of pomodori for the current cycle
+                    cnt_pomodori -= 1
+                    if length_short_break > 0 and cnt_short_breaks > 0:
+                        # length of short breaks > 0 and short breaks left -> start short break
+                        changeState(States.ShortBreak, length_short_break)
+                    elif length_short_break == 0 and cnt_pomodori != 0:
+                        # no short breaks -> start next pomodori
+                        changeState(States.Pomodori, length_pomodori)
+                    elif cnt_pomodori == 0:
+                        # last pomodori over -> start long break
+                        changeState(States.LongBreak, length_long_break)
+                    else:
+                        # Something went wrong - exit
+                        print("Error - aborting.")
+                        exit(1)
+            elif state == States.ShortBreak:
+                # short break is not over
+                if end_time > datetime.now():
+                    pass
+                else:
+                    # decrease number of short breaks for the current cycle
+                    cnt_short_breaks -= 1
+                    # start next pomodori
+                    changeState(States.Pomodori, length_pomodori)
                 pass
+            elif state == States.LongBreak:
+                # long break is not over
+                if end_time > datetime.now():
+                    pass
+                else:
+                    # re-init variables, start next cycle
+                    cnt_pomodori = num_pomodori
+                    cnt_short_breaks = num_pomodori - 1
+                    changeState(States.Pomodori, length_pomodori)
             else:
-                # decrease number of short breaks for the current cycle
-                cnt_short_breaks -= 1
-                # start next pomodori
-                changeState(States.Pomodori, length_pomodori)
-            pass
-        elif state == States.LongBreak:
-            # long break is not over
-            if end_time > datetime.now():
-                pass
-            else:
-                # re-init variables, start next cycle
-                cnt_pomodori = num_pomodori
-                cnt_short_breaks = num_pomodori - 1
-                changeState(States.Pomodori, length_pomodori)
-        else:
-            # Something went wrong - exit
-            exit(1)
-        sleep(30)
+                # Something went wrong - exit
+                print("Error - aborting.")
+                exit(1)
+            sleep(30)
+        print("Shutdown finished.")
         
 
 if __name__ == "__main__":
 
     # start first pomodori
     changeState(States.Pomodori, length_pomodori)
-    pomodoroLoop()
-    exit(0)
+    pomodorothread = PomodoroThread()
+    pomodorothread.start()
+    while True:
+        command = input("> ")
+        if command == "q":
+            print("omodoro is shutting down, please wait some seconds.")
+            exit(0)
