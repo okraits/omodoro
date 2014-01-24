@@ -6,7 +6,6 @@
 #
 # TODO
 # -read length of pomodori and breaks from config file
-# -add possibilty to pause the process
 # -require acknowledgement for next pomodoro/break
 # -gtk GUI
 
