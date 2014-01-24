@@ -13,7 +13,7 @@
 from os import system
 from datetime import datetime, timedelta
 from time import sleep
-from threading import Thread
+from threading import Thread, Lock
 
 # SETTINGS
 # adjust the pomodoro cycle to your needs
@@ -29,8 +29,10 @@ class States:
 cnt_pomodori = num_pomodori # pomodori left in the current cycle
 cnt_short_breaks = num_pomodori - 1 # short breaks left in the current cycle
 end_time = None # end time of the current state
+time_left = None # time left after the pause
 state = States.Pomodori
 command = "" # input string
+lockObject = Lock()
 
 def changeState(newState, length):
     global end_time, state
@@ -60,6 +62,7 @@ class PomodoroThread(Thread):
         global cnt_pomodori, cnt_short_breaks, state
 
         while command != "q":
+            lockObject.acquire()
             if state == States.Pomodori:
                 # pomodori is not over
                 if end_time > datetime.now():
@@ -103,18 +106,35 @@ class PomodoroThread(Thread):
                 # Something went wrong - exit
                 print("Error - aborting.")
                 exit(1)
+            lockObject.release()
             sleep(30)
         print("Shutdown finished.")
         
 
 if __name__ == "__main__":
 
+
     # start first pomodori
     changeState(States.Pomodori, length_pomodori)
+    # run pomodoro thread
     pomodorothread = PomodoroThread()
     pomodorothread.start()
+
+    # commandline interface
+    print("""Welcome to omodoro. Available commands:\n
+ p pause the current pomodoro cycle
+ c continue the current pomodoro cycle
+ q quit omodoro\n""")
     while True:
-        command = input("> ")
-        if command == "q":
+        command = input("$ ")
+        if command == "p":
+            time_left = end_time - datetime.now()
+            lockObject.acquire(True)
+            print("Paused.")
+        elif command == "c":
+            end_time = datetime.now() + time_left
+            lockObject.release()
+            print("Continuing the current pomodoro cycle.\nNew End Time: %s" % end_time.strftime("%H:%M"))
+        elif command == "q":
             print("omodoro is shutting down, please wait some seconds.")
             exit(0)
