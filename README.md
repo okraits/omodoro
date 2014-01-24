@@ -27,6 +27,8 @@ omodoro has the following requirements:
 
 - Customize the variables in the SETTINGS section to your needs
 - Run the script with python
+- Enter "p" to pause the current pomodoro cycle
+- Enter "c" to continue the current pomodoro cycle - the end time will be adjusted
 - Enter "q" to quit omodoro
 
 ### 4. License
