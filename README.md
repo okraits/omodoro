@@ -15,6 +15,7 @@ omodoro is, as the name suggests, a tool for using the pomodoro technique.
 Currently it provides the following features:
 
 - display periodic reminders for pomodori and breaks
+- option to pause and continue the cycle
 
 ### 2. Requirements
 

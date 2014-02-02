@@ -8,6 +8,7 @@
 # -read length of pomodori and breaks from config file
 # -require acknowledgement for next pomodoro/break
 # -gtk GUI
+# -analyze bug: omodoro doesn't quit if paused
 
 from os import system
 from datetime import datetime, timedelta
@@ -39,17 +40,18 @@ def changeState(newState, length):
     description = ""
     if newState == States.Pomodori:
         title = "Next Pomodori"
-        description = "Please start with the next Pomodori!\n\nEnd Time:"
+        description = "Please start with the next Pomodori!\nEnd Time:"
     elif newState == States.ShortBreak:
         title = "Short Break"
-        description = "Please take a short break!\n\nEnd Time:"
+        description = "Please take a short break!\nEnd Time:"
     elif newState == States.LongBreak:
         title = "Long Break"
-        description = "Please take a long break!\n\nEnd Time:"
+        description = "Please take a long break!\nEnd Time:"
     else:
         # Something went wrong - exit
         exit(1)
     end_time = datetime.now() + timedelta(minutes=length)
+    print("\n%s\nEnd Time: %s\n$ " % (title, end_time.strftime("%H:%M")), end="")
     system("notify-send -u critical '%s' '%s %s'" % (title, description, end_time.strftime("%H:%M")))
     state = newState
 
@@ -112,6 +114,10 @@ class PomodoroThread(Thread):
 
 if __name__ == "__main__":
 
+    print("""Welcome to omodoro. Available commands:\n
+ p pause the current pomodoro cycle
+ c continue the current pomodoro cycle
+ q quit omodoro""")
 
     # start first pomodori
     changeState(States.Pomodori, length_pomodori)
@@ -120,20 +126,16 @@ if __name__ == "__main__":
     pomodorothread.start()
 
     # commandline interface
-    print("""Welcome to omodoro. Available commands:\n
- p pause the current pomodoro cycle
- c continue the current pomodoro cycle
- q quit omodoro\n""")
     while True:
-        command = input("$ ")
+        command = input()
         if command == "p":
             time_left = end_time - datetime.now()
             lockObject.acquire(True)
-            print("Paused.")
+            print("Paused.\n$ ", end="")
         elif command == "c":
             end_time = datetime.now() + time_left
             lockObject.release()
-            print("Continuing the current pomodoro cycle.\nNew End Time: %s" % end_time.strftime("%H:%M"))
+            print("Continuing the current pomodoro cycle.\nNew End Time: %s\n$ " % end_time.strftime("%H:%M"), end="")
         elif command == "q":
             print("omodoro is shutting down, please wait some seconds.")
             exit(0)
