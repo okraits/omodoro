@@ -14,6 +14,7 @@ from os import system
 from datetime import datetime, timedelta
 from time import sleep
 from threading import Thread, Lock
+from sys import argv
 
 # SETTINGS
 # adjust the pomodoro cycle to your needs
@@ -22,6 +23,24 @@ length_pomodori = 25 # length of one pomodori in minutes
 length_short_break = 5 # length of a short break in minutes
 length_long_break = 15 # length of a long break in minutes
 
+def printUsageInfo():
+	print("""Usage:
+\tomodoro
+\tomodoro P-L-S-B
+with
+\tP\tnumber of pomodori to do in a cycle
+\tL\tlength of one pomodori in minutes
+\tS\tlength of a short break in minutes
+\tB\tlength of a long break in minutes\n
+Example with the default values:
+\tomodoro 4-25-5-15
+""")
+
+def printCLIInfo():
+    print("""Welcome to omodoro. Available commands:\n
+ p pause the current pomodoro cycle
+ c continue the current pomodoro cycle
+ q quit omodoro""")
 
 # global variables
 class States:
@@ -114,28 +133,39 @@ class PomodoroThread(Thread):
 
 if __name__ == "__main__":
 
-    print("""Welcome to omodoro. Available commands:\n
- p pause the current pomodoro cycle
- c continue the current pomodoro cycle
- q quit omodoro""")
+	if len(argv) != 1:
+		if len(argv) == 2:
+			try:
+				user_values = argv[1].split('-')
+				num_pomodori = int(user_values[0])
+				length_pomodori = int(user_values[1])
+				length_short_break = int(user_values[2])
+				length_long_break = int(user_values[3])
+			except Exception as e:
+				print("Invalid commandline argument: \n\t" + str(e))
+				exit(1)
+		else:
+			printUsageInfo()
+			exit(1)
 
-    # start first pomodori
-    changeState(States.Pomodori, length_pomodori)
-    # run pomodoro thread
-    pomodorothread = PomodoroThread()
-    pomodorothread.start()
+	printCLIInfo()
+	# start first pomodori
+	changeState(States.Pomodori, length_pomodori)
+	# run pomodoro thread
+	pomodorothread = PomodoroThread()
+	pomodorothread.start()
 
-    # commandline interface
-    while True:
-        command = input()
-        if command == "p":
-            time_left = end_time - datetime.now()
-            lockObject.acquire(True)
-            print("Paused.\n$ ", end="")
-        elif command == "c":
-            end_time = datetime.now() + time_left
-            lockObject.release()
-            print("Continuing the current pomodoro cycle.\nNew End Time: %s\n$ " % end_time.strftime("%H:%M"), end="")
-        elif command == "q":
-            print("omodoro is shutting down, please wait some seconds.")
-            exit(0)
+	# commandline interface
+	while True:
+		command = input()
+		if command == "p":
+			time_left = end_time - datetime.now()
+			lockObject.acquire(True)
+			print("Paused.\n$ ", end="")
+		elif command == "c":
+			end_time = datetime.now() + time_left
+			lockObject.release()
+			print("Continuing the current pomodoro cycle.\nNew End Time: %s\n$ " % end_time.strftime("%H:%M"), end="")
+		elif command == "q":
+			print("omodoro is shutting down, please wait some seconds.")
+			exit(0)
