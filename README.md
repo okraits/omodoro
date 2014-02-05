@@ -42,7 +42,8 @@ bugreports, feature requests, improvements, etc. via github or mail at
 
 omodoro has the following requirements:
 
-- Python Version 2 or 3
+- Python 3
+- for Python 2 please use [https://github.com/okraits/omodoro/tree/omodoro-python2](https://github.com/okraits/omodoro/tree/omodoro-python2)
 - libnotify
 
 ### 5. Usage
