@@ -4,12 +4,6 @@
 # http://okraits.de okraits@arcor.de
 # https://github.com/okraits/omodoro
 #
-# TODO
-# -read length of pomodori and breaks from config file
-# -require acknowledgement for next pomodoro/break
-# -gtk GUI
-# -analyze bug: omodoro doesn't quit if paused
-
 from os import system
 from datetime import datetime, timedelta
 from time import sleep

@@ -3,11 +3,12 @@
 ## Contents:
 
 1. Overview
-2. Requirements
-3. Usage
-4. Customization
-5. License
-6. Authorship, feedback, questions and contributions
+2. License
+3. Feedback, questions and contributions
+4. Requirements
+5. Usage
+6. Customization
+7. Todo list
 
 ### 1. Overview
 
@@ -19,14 +20,32 @@ Currently it provides the following features:
 - option to pause and continue the cycle
 - commandline argument for user-specific pomodoro cycle
 
-### 2. Requirements
+### 2. License
+
+This software is released under the terms of the
+GNU General Public License v2:
+
+[http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt](http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt)
+
+### 3. Feedback, questions and contributions
+
+There is a git repository available at github:
+
+[https://github.com/okraits/omodoro](https://github.com/okraits/omodoro)
+
+This software was initiated by Oliver Kraitschy (http://okraits.de).
+Please feel free to send him feedback and questions regarding
+bugreports, feature requests, improvements, etc. via github or mail at
+[okraits[at]arcor[dot]de](mailto:okraits@arcor.de).
+
+### 4. Requirements
 
 omodoro has the following requirements:
 
 - Python Version 2 or 3
 - libnotify
 
-### 3. Usage
+### 5. Usage
 
 - Run the script with python:
 
@@ -36,7 +55,7 @@ omodoro has the following requirements:
 - Enter "c" to continue the current pomodoro cycle - the end time will be adjusted
 - Enter "q" to quit omodoro
 
-### 4. Customization
+### 6. Customization
 
 You can adjust the pomodoro cycle to your needs by
 
@@ -59,20 +78,14 @@ Example with the default values:
 
 	./omodoro.py 4-25-5-15
 
-### 5. License
+### 7. Todo list
 
-This software is released under the terms of the
-GNU General Public License v2:
+These are things which are planned to be done, at some point
+in the future.
 
-[http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt](http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt)
+- read length of pomodori and breaks from config file
+- require acknowledgement for next pomodoro/break
+- skip current pomodori/break
+- gtk GUI
+- analyze bug: omodoro doesn't quit if paused
 
-### 6. Authorship, feedback, questions and contributions
-
-There is a git repository available at github:
-
-[https://github.com/okraits/omodoro](https://github.com/okraits/omodoro)
-
-This software was initiated by Oliver Kraitschy (http://okraits.de).
-Please feel free to send him feedback and questions regarding
-bugreports, feature requests, improvements, etc. via mail at
-[okraits[at]arcor[dot]de](mailto:okraits@arcor.de).
