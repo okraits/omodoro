@@ -129,15 +129,20 @@ if __name__ == "__main__":
 
     if len(argv) != 1:
         if len(argv) == 2:
-            try:
-                user_values = argv[1].split('-')
-                num_pomodori = int(user_values[0])
-                length_pomodori = int(user_values[1])
-                length_short_break = int(user_values[2])
-                length_long_break = int(user_values[3])
-            except Exception as e:
-                print("Invalid commandline argument: \n\t" + str(e))
-                exit(1)
+            if (argv[1] == "-h") or (argv[1] == "--help"):
+                printUsageInfo()
+                exit(0)
+            else:
+                try:
+                    user_values = argv[1].split('-')
+                    num_pomodori = int(user_values[0])
+                    length_pomodori = int(user_values[1])
+                    length_short_break = int(user_values[2])
+                    length_long_break = int(user_values[3])
+                except:
+                    print("Invalid argument: " + str(argv[1]) + "\n")
+                    printUsageInfo()
+                    exit(1)
         else:
             printUsageInfo()
             exit(1)
