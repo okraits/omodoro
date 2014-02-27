@@ -54,6 +54,7 @@ omodoro has the following requirements:
 
 - Enter "p" to pause the current pomodoro cycle
 - Enter "c" to continue the current pomodoro cycle - the end time will be adjusted
+- Enter "n" to abort the current pomodori or break and start the next one
 - Enter "q" to quit omodoro
 
 ### 6. Customization
@@ -86,7 +87,6 @@ in the future.
 
 - read length of pomodori and breaks from config file
 - require acknowledgement for next pomodoro/break
-- skip current pomodori/break
 - gtk GUI
 - analyze bug: omodoro doesn't quit if paused
 

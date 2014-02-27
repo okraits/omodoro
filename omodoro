@@ -34,6 +34,7 @@ def printCLIInfo():
     print("""Welcome to omodoro. Available commands:\n
  p pause the current pomodoro cycle
  c continue the current pomodoro cycle
+ n abort current pomodori/break, start next one
  q quit omodoro""")
 
 # global variables
@@ -46,9 +47,10 @@ time_left = None # time left after the pause
 state = States.Pomodori
 command = "" # input string
 lockObject = Lock()
+nextState = False # indicates user-triggered state change
 
 def changeState(newState, length):
-    global end_time, state
+    global end_time, state, nextState
     title = ""
     description = ""
     if newState == States.Pomodori:
@@ -67,6 +69,7 @@ def changeState(newState, length):
     print("\n%s\nEnd Time: %s\n$ " % (title, end_time.strftime("%H:%M")), end="")
     system("notify-send -u critical '%s' '%s %s'" % (title, description, end_time.strftime("%H:%M")))
     state = newState
+    nextState = False # user-triggered change state finished
 
 class PomodoroThread(Thread):
     def __init__(self):
@@ -79,7 +82,7 @@ class PomodoroThread(Thread):
             lockObject.acquire()
             if state == States.Pomodori:
                 # pomodori is not over
-                if end_time > datetime.now():
+                if end_time > datetime.now() and not nextState:
                     pass
                 else:
                     # decrease number of pomodori for the current cycle
@@ -99,7 +102,7 @@ class PomodoroThread(Thread):
                         exit(1)
             elif state == States.ShortBreak:
                 # short break is not over
-                if end_time > datetime.now():
+                if end_time > datetime.now() and not nextState:
                     pass
                 else:
                     # decrease number of short breaks for the current cycle
@@ -109,7 +112,7 @@ class PomodoroThread(Thread):
                 pass
             elif state == States.LongBreak:
                 # long break is not over
-                if end_time > datetime.now():
+                if end_time > datetime.now() and not nextState:
                     pass
                 else:
                     # re-init variables, start next cycle
@@ -165,6 +168,11 @@ if __name__ == "__main__":
             end_time = datetime.now() + time_left
             lockObject.release()
             print("Continuing the current pomodoro cycle.\nNew End Time: %s\n$ " % end_time.strftime("%H:%M"), end="")
+        elif command == "n":
+            nextState = True
+            print("Skipping to next pomodori/break, please wait some seconds.", end="")
         elif command == "q":
             print("omodoro is shutting down, please wait some seconds.")
             exit(0)
+        else:
+            print("Unknown command.\n$ ", end="")
