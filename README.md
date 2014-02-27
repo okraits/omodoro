@@ -18,6 +18,7 @@ Currently it provides the following features:
 
 - display periodic reminders for pomodori and breaks
 - option to pause and continue the cycle
+- option to abort the current pomodori or break and start the next one
 - commandline argument for user-specific pomodoro cycle
 
 ### 2. License
