@@ -1,0 +1,13 @@
+[POMODORO]
+
+# This is the number of pomodori you wish to complete in this sprint.
+number = 4
+
+# This is the length of each pomodoro in minutes
+length = 25
+
+# This is the length of each short break in minutes
+short_break = 5
+
+# This is the length of each long break in minutes
+long_break = 15
