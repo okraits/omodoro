@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+from __future__ import print_function
+
 # pomodoro script by Oliver Kraitschy
 # http://okraits.de okraits@arcor.de
 # https://github.com/okraits/omodoro
@@ -8,7 +10,7 @@ from os import system
 from datetime import datetime, timedelta
 from time import sleep
 from threading import Thread, Lock
-from sys import argv
+from sys import argv, version_info
 from configparser import ConfigParser
 from os.path import exists
 
@@ -132,6 +134,12 @@ class PomodoroThread(Thread):
 
 if __name__ == "__main__":
 
+    if version_info >= (3, 0):
+        get_input = input
+    else:
+        get_input = raw_input
+
+
     conf_file = 'omodoro.conf'
     if exists(conf_file):
         config = ConfigParser()
@@ -176,7 +184,7 @@ if __name__ == "__main__":
 
     # commandline interface
     while True:
-        command = input()
+        command = get_input()
         if command == "p":
             time_left = end_time - datetime.now()
             lockObject.acquire(True)
