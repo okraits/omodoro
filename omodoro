@@ -1,18 +1,22 @@
 #!/usr/bin/python
 
-from __future__ import print_function
-
 # pomodoro script by Oliver Kraitschy
 # http://okraits.de okraits@arcor.de
 # https://github.com/okraits/omodoro
-#
-from os import system
+
+from __future__ import print_function
+from os import system, getenv
 from datetime import datetime, timedelta
 from time import sleep
 from threading import Thread, Lock
 from sys import argv, version_info
-from configparser import ConfigParser
 from os.path import exists
+if version_info >= (3, 0):
+    get_input = input
+    from configparser import ConfigParser
+else:
+    get_input = raw_input
+    from ConfigParser import ConfigParser
 
 # SETTINGS
 # adjust the pomodoro cycle to your needs
@@ -134,27 +138,20 @@ class PomodoroThread(Thread):
 
 if __name__ == "__main__":
 
-    if version_info >= (3, 0):
-        get_input = input
-    else:
-        get_input = raw_input
-
-
     conf_file = 'omodoro.conf'
     if exists(conf_file):
         config = ConfigParser()
         config.read(conf_file)
         try:
-            num_pomodori = int(config['POMODORO']['number'])
-            length_pomodori = int(config['POMODORO']['length'])
-            length_short_break = int(config['POMODORO']['short_break'])
-            length_long_break = int(config['POMODORO']['long_break'])
+            num_pomodori = config.getint('POMODORO','number')
+            length_pomodori = config.getint('POMODORO','length')
+            length_short_break = config.getint('POMODORO','short_break')
+            length_long_break = config.getint('POMODORO','long_break')
         except KeyError as error:
             print('"{key}" is not located in the config file "{file}".'.format(
                 key=error,
                 file=conf_file))
             exit(1)
-
     if len(argv) != 1:
         if len(argv) == 2:
             if (argv[1] == "-h") or (argv[1] == "--help"):
