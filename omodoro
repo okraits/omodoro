@@ -197,6 +197,7 @@ if __name__ == "__main__":
             nextState = True
             print("Skipping to next pomodori/break, please wait some seconds.", end="")
         elif command == "q":
+            lockObject.release()
             print("omodoro is shutting down, please wait some seconds.")
             exit(0)
         else:
