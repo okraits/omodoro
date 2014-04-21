@@ -20,6 +20,7 @@ Currently it provides the following features:
 - option to pause and continue the cycle
 - option to abort the current pomodori or break and start the next one
 - commandline argument for user-specific pomodoro cycle
+- /home/$USER/.omodoro.conf configuration file for user-specific pomodoro cycle
 
 ### 2. License
 
@@ -43,15 +44,14 @@ bugreports, feature requests, improvements, etc. via github or mail at
 
 omodoro has the following requirements:
 
-- Python 3
-- for Python 2 please use [https://github.com/okraits/omodoro/tree/omodoro-python2](https://github.com/okraits/omodoro/tree/omodoro-python2)
+- Python 2 or 3
 - libnotify
 
 ### 5. Usage
 
 - Run the script with python:
 
-	python omodoro.py
+	python omodoro
 
 - Enter "p" to pause the current pomodoro cycle
 - Enter "c" to continue the current pomodoro cycle - the end time will be adjusted
@@ -62,13 +62,18 @@ omodoro has the following requirements:
 
 You can adjust the pomodoro cycle to your needs by
 
-- editing the variables in the SETTINGS section of the omodoro.py script
+- editing the variables in the SETTINGS section of the omodoro script
+
+or
+
+- copying the file omodoro.conf.sample as .omodoro.conf into your home
+directory and modifying it
 
 or
 
 - adding a commandline argument by running omodoro like this:
 
-	./omodoro.py P-L-S-B
+	python omodoro P-L-S-B
 
 with
 
@@ -79,14 +84,13 @@ with
 
 Example with the default values:
 
-	./omodoro.py 4-25-5-15
+	python omodoro 4-25-5-15
 
 ### 7. Todo list
 
 These are things which are planned to be done, at some point
 in the future.
 
-- read length of pomodori and breaks from config file
 - require acknowledgement for next pomodoro/break
 - gtk GUI
 - analyze bug: omodoro doesn't quit if paused
