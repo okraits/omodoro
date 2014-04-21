@@ -25,6 +25,9 @@ length_pomodori = 25 # length of one pomodori in minutes
 length_short_break = 5 # length of a short break in minutes
 length_long_break = 15 # length of a long break in minutes
 
+# path to user-specific configuration file
+conf_file = getenv("HOME") + "/.omodoro.conf"
+
 def printUsageInfo():
     print("""Usage:
 \tomodoro
@@ -138,7 +141,6 @@ class PomodoroThread(Thread):
 
 if __name__ == "__main__":
 
-    conf_file = 'omodoro.conf'
     if exists(conf_file):
         config = ConfigParser()
         config.read(conf_file)
@@ -152,6 +154,7 @@ if __name__ == "__main__":
                 key=error,
                 file=conf_file))
             exit(1)
+
     if len(argv) != 1:
         if len(argv) == 2:
             if (argv[1] == "-h") or (argv[1] == "--help"):
