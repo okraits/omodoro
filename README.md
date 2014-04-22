@@ -91,4 +91,3 @@ in the future.
 
 - require acknowledgement for next pomodoro/break
 - gtk GUI
-- analyze bug: omodoro doesn't quit if paused
