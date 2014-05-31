@@ -8,7 +8,7 @@ from __future__ import print_function
 from os import system, getenv
 from datetime import datetime, timedelta
 from time import sleep
-from threading import Thread, Lock
+from threading import Thread, Lock, ThreadError
 from sys import argv, version_info
 from os.path import exists
 if version_info >= (3, 0):
@@ -186,18 +186,29 @@ if __name__ == "__main__":
     while True:
         command = get_input()
         if command == "p":
-            time_left = end_time - datetime.now()
-            lockObject.acquire(True)
-            print("Paused.\n$ ", end="")
+            if time_left is None: # if not None, already paused
+                if lockObject.acquire(True):
+                    time_left = end_time - datetime.now()
+                    print("Paused.\n$ ", end="")
+            else:
+                print("Error: current cycle is already paused.\n$ ", end="")
         elif command == "c":
+            try:
+                lockObject.release()
+            except ThreadError:
+                print("Error: current cycle is not paused.\n$ ", end="")
+                continue
             end_time = datetime.now() + time_left
-            lockObject.release()
+            time_left = None
             print("Continuing the current pomodoro cycle.\nNew End Time: %s\n$ " % end_time.strftime("%H:%M"), end="")
         elif command == "n":
             nextState = True
             print("Skipping to next pomodori/break, please wait some seconds.", end="")
         elif command == "q":
-            lockObject.release()
+            try:
+                lockObject.release()
+            except ThreadError:
+                pass # Lock was not locked - exit anyway
             print("omodoro is shutting down, please wait some seconds.")
             exit(0)
         else:
