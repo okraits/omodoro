@@ -46,7 +46,7 @@ bugreports, feature requests, improvements, etc. via github or mail at
 omodoro has the following requirements:
 
 - Python 2 or 3
-- libnotify
+- libnotify (on all Systems except Microsoft Windows)
 
 ### 5. Usage
 
