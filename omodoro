@@ -9,6 +9,7 @@ from os import system, getenv
 from datetime import datetime, timedelta
 from time import sleep
 from threading import Thread, Lock, ThreadError
+from platform import system as platformname
 from sys import argv, version_info
 from os.path import exists
 if version_info >= (3, 0):
@@ -17,6 +18,10 @@ if version_info >= (3, 0):
 else:
     get_input = raw_input
     from ConfigParser import ConfigParser
+if platformname() == 'Windows':
+    onWindows = True
+else:
+    onWindows = False
 
 # SETTINGS
 # adjust the pomodoro cycle to your needs
@@ -26,7 +31,10 @@ length_short_break = 5 # length of a short break in minutes
 length_long_break = 15 # length of a long break in minutes
 
 # path to user-specific configuration file
-conf_file = getenv("HOME") + "/.omodoro.conf"
+if onWindows:
+    conf_file = getenv("APPDATA") + "\omodoro.conf"
+else:
+    conf_file = getenv("HOME") + "/.omodoro.conf"
 
 def printUsageInfo():
     print("""Usage:
@@ -66,19 +74,23 @@ def changeState(newState, length):
     description = ""
     if newState == States.Pomodori:
         title = "Next Pomodori"
-        description = "Please start with the next Pomodori!\nEnd Time:"
+        description = "Please start with the next Pomodori!\nEnd Time: "
     elif newState == States.ShortBreak:
         title = "Short Break"
-        description = "Please take a short break!\nEnd Time:"
+        description = "Please take a short break!\nEnd Time: "
     elif newState == States.LongBreak:
         title = "Long Break"
-        description = "Please take a long break!\nEnd Time:"
+        description = "Please take a long break!\nEnd Time: "
     else:
         # Something went wrong - exit
         exit(1)
     end_time = datetime.now() + timedelta(minutes=length)
+    description = description + end_time.strftime("%H:%M")
     print("\n%s\nEnd Time: %s\n$ " % (title, end_time.strftime("%H:%M")), end="")
-    system("notify-send -u critical '%s' '%s %s'" % (title, description, end_time.strftime("%H:%M")))
+    if onWindows:
+        system('Msg "%s" "%s"' % (getenv("USERNAME"), description.replace('\n', '   ')))
+    else:
+        system("notify-send -u critical '%s' '%s'" % (title, description))
     state = newState
     nextState = False # user-triggered change state finished
 

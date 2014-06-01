@@ -20,7 +20,8 @@ Currently it provides the following features:
 - option to pause and continue the cycle
 - option to abort the current pomodori or break and start the next one
 - commandline argument for user-specific pomodoro cycle
-- _/home/$USER/.omodoro.conf_ configuration file for user-specific pomodoro cycle
+- _/home/$USER/.omodoro.conf_ or _APPDATA\omodoro.conf_ configuration file for user-specific pomodoro cycle
+- runs on any system with Python installed - Linux, Windows and others
 
 ### 2. License
 
