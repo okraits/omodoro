@@ -91,4 +91,5 @@ These are things which are planned to be done, at some point
 in the future.
 
 - require acknowledgement for next pomodoro/break
-- gtk GUI
+- tk or gtk GUI
+- don't do a pomodoro cycle, just measure work/break times
