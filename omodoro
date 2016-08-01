@@ -54,6 +54,7 @@ def printCLIInfo():
  p pause the current pomodoro cycle
  c continue the current pomodoro cycle
  n abort current pomodori/break, start next one
+ s get status of current cycle
  q quit omodoro""")
 
 # global variables
@@ -216,6 +217,15 @@ if __name__ == "__main__":
         elif command == "n":
             nextState = True
             print("Skipping to next pomodori/break, please wait some seconds.", end="")
+        elif command == "s":
+            if state == States.Pomodori:
+                print("Pomodoro cycle", end="")
+            elif state == States.ShortBreak:
+                print("Short break", end="")
+            elif state == States.LongBreak:
+                print("Long break", end="")
+
+            print(", %s minutes left\n$ " % round((end_time - datetime.now()).total_seconds() / 60) , end="")
         elif command == "q":
             try:
                 lockObject.release()

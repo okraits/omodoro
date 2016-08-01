@@ -59,6 +59,7 @@ When omodoro is running, you can type:
 - __p__ to pause the current pomodoro cycle
 - __c__ to continue the current pomodoro cycle - the end time will be adjusted
 - __n__ to abort the current pomodori or break and start the next one
+- __s__ to get the status of the current cycle
 - __q__ to quit omodoro
 
 ### 6. Customization
