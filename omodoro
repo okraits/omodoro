@@ -11,7 +11,7 @@ from time import sleep
 from threading import Thread, Lock, ThreadError
 from platform import system as platformname
 from sys import argv, version_info
-from os.path import exists
+from os.path import exists, join
 if version_info >= (3, 0):
     get_input = input
     from configparser import ConfigParser
@@ -32,9 +32,9 @@ length_long_break = 15 # length of a long break in minutes
 
 # path to user-specific configuration file
 if onWindows:
-    conf_file = getenv("APPDATA") + "\omodoro.conf"
+    conf_file = join(getenv("APPDATA"), "omodoro.conf")
 else:
-    conf_file = getenv("HOME") + "/.omodoro.conf"
+    conf_file = join(getenv("HOME"), ".omodoro.conf")
 
 def printUsageInfo():
     print("""Usage:
