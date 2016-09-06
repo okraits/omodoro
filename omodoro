@@ -225,7 +225,12 @@ if __name__ == "__main__":
             elif state == States.LongBreak:
                 print("Long break", end="")
 
-            print(", %d minutes left\n$ " % round((end_time - datetime.now()).total_seconds() / 60) , end="")
+            if time_left is None:
+                print(", running, %d minutes left\n$ " % round(
+                    (end_time - datetime.now()).total_seconds() / 60) , end="")
+            else:
+                print(", paused, %d minutes left\n$ " % round(
+                    time_left.total_seconds() / 60), end="")
         elif command == "q":
             try:
                 lockObject.release()
