@@ -61,6 +61,7 @@ When omodoro is running, you can type:
 - __n__ to abort the current pomodori or break and start the next one
 - __s__ to get the status of the current cycle
 - __q__ to quit omodoro
+- __t__ to toggle the terminal bell on/off
 
 ### 6. Customization
 
@@ -73,7 +74,7 @@ directory and modifying it
 
 3. adding a commandline argument by running omodoro like this:
 
-`python omodoro P-L-S-B`
+`python omodoro P-L-S-B-T`
 
 with
 
@@ -81,10 +82,11 @@ with
 	L	length of one pomodori in minutes
 	S	length of a short break in minutes
 	B	length of a long break in minutes
+	T	option for playing a terminal bell at the start of each pomodoro / break. 1 for ON, 0 for OFF.
 
 Example with the default values:
 
-`python omodoro 4-25-5-15`
+`python omodoro 4-25-5-15-0`
 
 ### 7. Todo list
 

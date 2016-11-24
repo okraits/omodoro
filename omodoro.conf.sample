@@ -11,3 +11,6 @@ short_break = 5
 
 # This is the length of each long break in minutes
 long_break = 15
+
+# This is the option to play a terminal bell at the start of each pomodoro / break
+play_terminal_bell = False

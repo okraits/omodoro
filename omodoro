@@ -29,6 +29,7 @@ num_pomodori = 4 # number of pomodori to do in a cycle
 length_pomodori = 25 # length of one pomodori in minutes
 length_short_break = 5 # length of a short break in minutes
 length_long_break = 15 # length of a long break in minutes
+play_terminal_bell = False # Option to play a terminal bell at the start of cycles
 
 # path to user-specific configuration file
 if onWindows:
@@ -44,9 +45,10 @@ with
 \tP\tnumber of pomodori to do in a cycle
 \tL\tlength of one pomodori in minutes
 \tS\tlength of a short break in minutes
-\tB\tlength of a long break in minutes\n
+\tB\tlength of a long break in minutes
+\tT\tterminal bell switch: 1 = On / 0 = Off \n
 Example with the default values:
-\tomodoro 4-25-5-15
+\tomodoro 4-25-5-15-0
 """)
 
 def printCLIInfo():
@@ -55,7 +57,8 @@ def printCLIInfo():
  c continue the current pomodoro cycle
  n abort current pomodori/break, start next one
  s get status of current cycle
- q quit omodoro""")
+ q quit omodoro
+ t terminal bell on/off toggle""")
 
 # global variables
 class States:
@@ -87,7 +90,12 @@ def changeState(newState, length):
         exit(1)
     end_time = datetime.now() + timedelta(minutes=length)
     description = description + end_time.strftime("%H:%M")
-    print("\n%s\nEnd Time: %s\n$ " % (title, end_time.strftime("%H:%M")), end="")
+
+    if play_terminal_bell == True:
+        print("\n%s\nEnd Time: %s\n\a$ " % (title, end_time.strftime("%H:%M")), end="")
+    else:
+        print("\n%s\nEnd Time: %s\n$ " % (title, end_time.strftime("%H:%M")), end="")
+
     if onWindows:
         system('Msg "%s" "%s"' % (getenv("USERNAME"), description.replace('\n', '   ')))
     else:
@@ -150,7 +158,7 @@ class PomodoroThread(Thread):
             lockObject.release()
             sleep(30)
         print("Shutdown finished.")
-        
+
 
 if __name__ == "__main__":
 
@@ -176,10 +184,12 @@ if __name__ == "__main__":
             else:
                 try:
                     user_values = argv[1].split('-')
+		    print(user_values[4])
                     num_pomodori = int(user_values[0])
                     length_pomodori = int(user_values[1])
                     length_short_break = int(user_values[2])
                     length_long_break = int(user_values[3])
+		    play_terminal_bell = bool(int((user_values[4])))
                 except:
                     print("Invalid argument: " + str(argv[1]) + "\n")
                     printUsageInfo()
@@ -194,6 +204,7 @@ if __name__ == "__main__":
     # run pomodoro thread
     pomodorothread = PomodoroThread()
     pomodorothread.start()
+
 
     # commandline interface
     while True:
@@ -238,5 +249,13 @@ if __name__ == "__main__":
                 pass # Lock was not locked - exit anyway
             print("omodoro is shutting down, please wait some seconds.")
             exit(0)
+        #toggles the terminal bell option on or off
+        elif command == "t":
+            if play_terminal_bell == True:
+                play_terminal_bell = False
+                print("Terminal bell off")
+            elif play_terminal_bell == False:
+                play_terminal_bell = True
+                print("Terminal bell on")
         else:
             print("Unknown command.\n$ ", end="")
