@@ -60,8 +60,8 @@ When omodoro is running, you can type:
 - __c__ to continue the current pomodoro cycle - the end time will be adjusted
 - __n__ to abort the current pomodori or break and start the next one
 - __s__ to get the status of the current cycle
+- __t__ to turn the terminal bell on/off
 - __q__ to quit omodoro
-- __t__ to toggle the terminal bell on/off
 
 ### 6. Customization
 
@@ -82,7 +82,7 @@ with
 	L	length of one pomodori in minutes
 	S	length of a short break in minutes
 	B	length of a long break in minutes
-	T	option for playing a terminal bell at the start of each pomodoro / break. 1 for ON, 0 for OFF.
+	T	enable/disable the terminal bell to be played at the begin of each pomodoro/break. 1 for on, 0 for off.
 
 Example with the default values:
 
