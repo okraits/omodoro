@@ -63,8 +63,8 @@ def printCLIInfo():
 # global variables
 class States:
     Pomodori, ShortBreak, LongBreak = range(3)
-cnt_pomodori = num_pomodori # pomodori left in the current cycle
-cnt_short_breaks = num_pomodori - 1 # short breaks left in the current cycle
+cnt_pomodori = 0 # pomodori left in the current cycle
+cnt_short_breaks = 0 # short breaks left in the current cycle
 end_time = None # end time of the current state
 time_left = None # time left after the pause
 state = States.Pomodori
@@ -195,6 +195,9 @@ if __name__ == "__main__":
             printUsageInfo()
             exit(1)
 
+    # initialize count variables
+    cnt_pomodori = num_pomodori
+    cnt_short_breaks = num_pomodori - 1
     printCLIInfo()
     # start first pomodori
     changeState(States.Pomodori, length_pomodori)
